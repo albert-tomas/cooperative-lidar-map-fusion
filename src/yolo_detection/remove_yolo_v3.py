@@ -57,7 +57,7 @@ def yolo_add_boxes(image_file, output_image_path):
     image = cv2.imread(image_file)
 
     # Initialize Roboflow
-    rf = Roboflow(api_key="m3mVIcAJXOFxaob0eVAt")
+    rf = Roboflow(api_key="7ggR7sauK27IzqiLS8VO")
 
     # Load the trained model
     model = rf.workspace("sicariata").project("person_lidar").version(1).model

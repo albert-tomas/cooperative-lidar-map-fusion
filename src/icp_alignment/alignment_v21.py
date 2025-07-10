@@ -24,21 +24,21 @@ from collections import defaultdict
 # v18 - Added configuration parameters for the BEV image generation
 # v19 - Fixed show_map bug and added an option to visualize the dynamic objects (people) only in the current frame
 # v20 - Added a function to paint the static_map as a grey scale, to better visualize the most prominent points (dense areas)
-# v21 - Tried a new approach to v20, as the grey scale was only being applied to the new points, not the whole static map
+# v21 - Tried a new approach to v20
 
 
 # File to be processed
 FILE_NAME = {
-    "catture": "D:/LiDAR-captures/Capture1911/CSV",
+    "capture1911": "D:/LiDAR-captures/Capture1911/CSV",
     "strada1": "D:/LiDAR-captures/strada1/CSV",
-    "strada2": "D:/LiDAR-captures/strada2/CSV",
+    "strada2": "D:/LiDAR-captures/strada2/CSV_transformed",
     "strada3": "D:/LiDAR-captures/strada3/CSV"
 }
 
 # Configuration
 CONFIG = {
     "selected_file": "strada2", # Change this to the desired file
-    "max_number_of_clouds": 50,
+    "max_number_of_clouds": 400,
     "voxel_size": 0.1,
     "print_realtime": True,
     "save_map": False,
@@ -191,7 +191,7 @@ def create_bev_image(csv_file, output_image_path, res=0.02, x_range=(-5, 5), y_r
 
 def initialize_roboflow():
     # Initialize Roboflow
-    rf = Roboflow(api_key="m3mVIcAJXOFxaob0eVAt")
+    rf = Roboflow(api_key="ROBOFLOW_API_KEY")
 
     # Load the trained model
     model = rf.workspace("sicariata").project("person_lidar").version(1).model
@@ -203,7 +203,7 @@ def yolo_add_boxes(image_file, output_image_path, model):
     image = cv2.imread(image_file)
 
     # Run the model prediction (Roboflow format)
-    predictions = model.predict(image, confidence=10, overlap=30).json()
+    predictions = model.predict(image, confidence=10, overlap=30).json() #10, 30
 
     # Draw bounding boxes and labels on the image
     for prediction in predictions['predictions']:
@@ -308,7 +308,7 @@ def add_to_static_map(static_map, new_cloud, counter, vsize, max_count):
 
     for idx in map(tuple, voxel_indices):
         w = counter[idx] / max_count
-        gray = 0.9 - 0.7 * w  # 0.2 (denso) → 0.9 (poco denso)
+        gray = 0.9 - 0.7 * w  # 0.2 (dense) → 0.9 (less dense)
         colors.append([gray, gray, gray])
 
     # Crear nube con colores solo para los nuevos puntos
@@ -321,7 +321,7 @@ def add_to_static_map(static_map, new_cloud, counter, vsize, max_count):
 
 def icp_alignment(csv_files, folder_path, vis_map):
     # Configuration
-    threshold = 0.5  # Distance threshold for ICP matching. Correspondance distance
+    threshold = 0.3  # Distance threshold for ICP matching. Correspondance distance
     max_iterations = 50 # Maximum number of iterations for ICP
     max_number_of_clouds = CONFIG["max_number_of_clouds"]
     voxel_size = CONFIG["voxel_size"]
@@ -345,7 +345,7 @@ def icp_alignment(csv_files, folder_path, vis_map):
     )
     predictions = yolo_add_boxes(first_bev, os.path.join(base_dir, "image_0_boxes.png"), model)
     
-    # Extract person points and color them
+    # Extract detected person points and color them
     person_global_cloud = o3d.geometry.PointCloud()
     person_cloud = extract_points_in_boxes(input_cloud, predictions, res=0.02, x_range=(-5, 5), y_range=(-5, 5))
     change_colors(person_cloud, COLORS["GREEN"])
@@ -374,7 +374,11 @@ def icp_alignment(csv_files, folder_path, vis_map):
         display_point_cloud(vis_map, show_cloud, point_size=1.0)
     
     # ICP setup
-    criteria = o3d.pipelines.registration.ICPConvergenceCriteria(max_iterations)
+    criteria = o3d.pipelines.registration.ICPConvergenceCriteria(
+        relative_fitness = 1e-4,
+        relative_rmse    = 1e-4,
+        max_iteration    = max_iterations
+)
     # Initialize an empty list to store transformations and add the identity matrix
     transformations = []
     current_transformation = np.eye(4)
@@ -408,7 +412,7 @@ def icp_alignment(csv_files, folder_path, vis_map):
             current_cloud_downsampled, static_map, threshold, np.eye(4),
             o3d.pipelines.registration.TransformationEstimationPointToPoint(), criteria = criteria
         )
-        
+        print(f"ICP converged: {icp_result.fitness:.4f}, RMSE: {icp_result.inlier_rmse:.4f}")
         # Update the current transformation for the next iteration
         current_transformation = np.dot(current_transformation, icp_result.transformation)
         transformations.append(icp_result.transformation)
@@ -462,6 +466,8 @@ def save_person_cloud(person_global_cloud, timestamp, base_path):
 
 def main():
     start_time = time.time()
+
+    print("Analyzing capture" + CONFIG["selected_file"] + ".")
 
     # Get CSV file list from selected folder
     folder_path = FILE_NAME[CONFIG["selected_file"]]

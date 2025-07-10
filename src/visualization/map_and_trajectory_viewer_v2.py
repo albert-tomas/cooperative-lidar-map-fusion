@@ -7,7 +7,7 @@ import pygetwindow as gw
 
 OPTIONS = {
     "capture_name": "strada2", # Options: "catture", "strada1", "strada2", "strada3"
-    "timestamp": "3005_1828", # Select the timestamp of the capture
+    "timestamp": "0806_1243", # Select the timestamp of the capture
     "print_map": True, # Print the map
     "print_trajectory": True, # Print the trajectory
     "print_person": True, # Print the persons

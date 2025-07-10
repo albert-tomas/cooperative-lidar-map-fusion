@@ -1,0 +1,30 @@
+
+
+--- 1106_1621 ---
+   selected_file: strada2
+   max_number_of_clouds: 400
+   voxel_size: 0.1
+   print_realtime: False
+   save_map: True
+   realtime_people_only: False
+   trajectory_sphere: True
+   radius: 0.2
+   threshold: 0.5
+   max_iterations: 50
+   point_size: 1.5
+Execution time: 4858.49 seconds
+
+--- 1106_1625 ---
+   selected_file: strada2
+   max_number_of_clouds: 400
+   voxel_size: 0.1
+   print_realtime: False
+   save_map: True
+   realtime_people_only: False
+   trajectory_sphere: True
+   radius: 0.15
+   threshold: 0.4
+   max_iterations: 50
+   point_size: 1.5
+Execution time: 5434.06 seconds
+
