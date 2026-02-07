@@ -38,29 +38,24 @@ two LiDAR captures using object-based initialization and ICP refinement.
 
 ## Repository Structure
 
-```
+```text
 src/
 ├── core/
-│   ├── dual_lidar_fusion.py        # Dual-robot map fusion pipeline
-│   ├── icp_alignment.py            # ICP-based point cloud alignment
-│   ├── remove_yolo.py              # Dynamic object removal using YOLO detections
-│   └── transform_csv_capture.py    # LiDAR CSV preprocessing
-│
-├── visualization/
-│   └── map_and_trajectory_viewer.py
+│   ├── dual_lidar_fusion.py          # Dual-robot map fusion pipeline
+│   ├── icp_alignment.py              # ICP-based point cloud alignment
+│   ├── remove_yolo.py                # Dynamic object removal using YOLO detections
+│   └── map_and_trajectory_viewer.py  # Map and trajectory visualization
 │
 └── experiments/
     ├── dual_lidar/
     ├── icp_alignment/
+    ├── visualization/
     ├── yolo_detection/
     └── YOLO_file/
 ```
 
-- **`core/`** contains the scripts corresponding to the final pipeline used to obtain the
-  results presented in the thesis.
-- **`visualization/`** provides tools to inspect point clouds, maps, and estimated trajectories.
-- **`experiments/`** contains intermediate versions, tests, datasets, and experimental artifacts
-  generated during the iterative development process.
+- **`core/`** contains the scripts corresponding to the final pipeline used to obtain the results presented in the thesis.
+- **`experiments/`** groups experimental code, intermediate versions, tests, datasets, and results generated during the iterative development process.
 
 ## Notes
 
@@ -74,10 +69,10 @@ partially or for reference purposes.
 ## Related Documents
 
 - Bachelor’s Thesis (PDF):  
-  [Cooperative LiDAR Sensing in Vehicular Scenarios]()
+  [Cooperative LiDAR Sensing in Vehicular Scenarios](docs/BachelorThesis_AlbertTomas_Cooperative_LiDAR_Sensing_2025.pdf)
 
 - Thesis presentation slides (PDF):  
-  [Project presentation]()
+  [Project presentation](docs/BachelorThesisPresentation_AlbertTomas_Cooperative_LiDAR_Sensing_2025.pdf)
 
 ## Author
 
