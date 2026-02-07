@@ -11,7 +11,7 @@ import cv2
 from collections import defaultdict
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from icp_alignment.alignment_v21 import *
+from experiments.icp_alignment.alignment_v21 import *
 from scipy.spatial import cKDTree
 
 
