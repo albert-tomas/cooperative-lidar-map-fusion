@@ -5,8 +5,8 @@ Telecommunications Engineering, titled *Cooperative LiDAR Sensing in Vehicular S
 
 The project explores a cooperative perception approach based on LiDAR data sharing,
 with the objective of generating a consistent 3D map from two independent mobile robots.
-The implementation follows an experimental, research-oriented methodology.
-This work was developed during an Erasmus exchange at Politecnico di Milano, in collaboration with the DEIB laboratory.
+The implementation follows an experimental, research-oriented methodology and was developed during an Erasmus exchange at Politecnico di Milano, in collaboration with the DEIB laboratory.
+
 
 ## Project Overview
 
@@ -14,7 +14,6 @@ Single-LiDAR perception systems suffer from limited field of view, occlusions, a
 spots, especially in urban or dynamic environments. This work investigates a cooperative
 LiDAR-based pipeline where information from two mobile robots is combined to improve
 environmental awareness and mapping accuracy.
-
 
 The implemented pipeline includes the following stages:
 
@@ -25,8 +24,7 @@ The implemented pipeline includes the following stages:
 5. Dual-robot map fusion using relative pose estimation and ICP refinement
 6. Visualization of maps and robot trajectories
 
-The system is implemented in Python and focuses on accurate alignment and map consistency,
-rather than real-time performance.
+The system is implemented in Python, with a focus on alignment accuracy and map consistency.
 
 
 ## Example Result
